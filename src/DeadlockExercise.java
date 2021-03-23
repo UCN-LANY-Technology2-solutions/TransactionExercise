@@ -1,8 +1,16 @@
 import java.sql.*;
 
 public class DeadlockExercise {
+	
+//	This is a very special case of deadlock. It only implicates a single table, however, the isolationlevel of READ_COMMITTED
+//	places a lock on the row that will be released on commit. So the two transactions here wants to place a lock on the row 
+//	with id = 2, but since both transactions waits for the other to commit, the deadlock happens.
+	
+//	This is a scenarios where the only solution is to actually use a more restrictive isolation level. SERIALIZABLE places a
+//	lock on the entire table, so the last transaction cannot start before the other is finished. That will solve the issue, 
+//	but also lower the performance of the system
 
-	private final int isolationLevel = Connection.TRANSACTION_READ_COMMITTED;
+	private final int isolationLevel = Connection.TRANSACTION_SERIALIZABLE;
 
 	public void transferAmount(int fromAccountId, int toAccountId, float amount) {
 		

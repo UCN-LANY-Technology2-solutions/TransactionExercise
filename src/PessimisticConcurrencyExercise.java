@@ -1,6 +1,8 @@
 import java.sql.*;
 
 public class PessimisticConcurrencyExercise {
+	
+//  The correct isolationlevel is repeatable_read, but that will actually introduce a risk of a deadlock. 
 
 	private final int isolationLevel = Connection.TRANSACTION_REPEATABLE_READ;
 
@@ -89,7 +91,7 @@ public class PessimisticConcurrencyExercise {
 					addInterest.setInt(2, accountId);
 					addInterest.setFloat(1, amount + interestAmount);
 
-					addInterest.execute();
+					addInterest.execute();  // aquires an exclusive lock on account, so if that is not released by the other transaction, a deadlock will occur
 
 					Program.printMsg("Added interest: " + interestAmount);
 				}
