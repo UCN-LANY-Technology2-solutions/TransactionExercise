@@ -2,13 +2,19 @@ import java.sql.*;
 
 public class DeadlockExercise {
 	
-//	This is a very special case of deadlock. It only implicates a single table, however, the isolationlevel of READ_COMMITTED
-//	places a lock on the row that will be released on commit. So the two transactions here wants to place a lock on the row 
-//	with id = 2, but since both transactions waits for the other to commit, the deadlock happens.
+//	This is a very special case of deadlock. It only implicates a single table, however, the isolationlevel of 
+//	READ_COMMITTED places a lock on the row that will be released on commit. So the two transactions here wants 
+//	to place a lock on the row with id = 2, but since both transactions waits for the other to commit, the deadlock 
+//  happens.
 	
-//	This is a scenarios where the only solution is to actually use a more restrictive isolation level. SERIALIZABLE places a
-//	lock on the entire table, so the last transaction cannot start before the other is finished. That will solve the issue, 
-//	but also lower the performance of the system
+//	This is a scenario with no safe solution. Even using a more restrictive isolation level like SERIALIZABLE will 
+//  not always work because it only locks records within the selected data set, in this case it is still possible
+//  for one transaction to place a lock on a record, that the other will try to read. 
+
+//  This is due to the phenomenon where the database system is allowed to physically overlap the execution of 
+//  serializable transactions in time (thereby increasing concurrency) so long as the effects of those transactions 
+//  still correspond to some possible order of serial execution. In other words, serializable transactions are only 
+//  potentially serializable and not actually serialized.	
 
 	private final int isolationLevel = Connection.TRANSACTION_SERIALIZABLE;
 
@@ -50,7 +56,7 @@ public class DeadlockExercise {
 					Program.printMsg("Account: "+ rs.getString(1) +" Balance: "+ rs.getFloat(2));
 				}
 
-				conn.commit();
+				conn.commit();		
 				
 			} catch (SQLException e) {
 
