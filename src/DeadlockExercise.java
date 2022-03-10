@@ -29,12 +29,13 @@ public class DeadlockExercise {
 		try {
 			try {
 				conn.setAutoCommit(false);
-						
+				
 				PreparedStatement withdraw = conn.prepareStatement(withdrawSql);
 				withdraw.setFloat(1, amount);
 				withdraw.setInt(2, fromAccountId);
 				
 				withdraw.execute();
+				withdraw.close();
 				
 				Program.printMsg("Withdrew: "+ amount);
 				
@@ -43,6 +44,7 @@ public class DeadlockExercise {
 				deposit.setFloat(2, toAccountId);
 				
 				deposit.execute();
+				deposit.close();
 				
 				Program.printMsg("Deposited: "+ amount);
 				
@@ -55,18 +57,17 @@ public class DeadlockExercise {
 					
 					Program.printMsg("Account: "+ rs.getString(1) +" Balance: "+ rs.getFloat(2));
 				}
-
+				
+				readBalance.close();
 				conn.commit();		
 				
 			} catch (SQLException e) {
 
 				conn.rollback();
-				throw e;
-				
-			} finally {
-				
-				conn.setAutoCommit(true);
-			}
+				System.out.println("Transaction rolled back");
+
+				e.printStackTrace();
+			} 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
