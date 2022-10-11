@@ -1,3 +1,5 @@
+package database;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -5,30 +7,25 @@ import java.sql.SQLException;
 
 import com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import com.microsoft.sqlserver.jdbc.osgi.SQLServerDataSourceFactory;
 
-public class Database {
+public class DataContext {
 
-	public static Connection getConnection(int isolationLevel) {
+	public static Connection getConnection() throws SQLServerException {
 
-		Connection conn = null;
+		// TODO: Change the values below to connect to another instance of SQL Server
 
-		try {
-			// Change the values below to connect to another instance of SQL Server
-			SQLServerDataSource ds = new SQLServerDataSource();
-			ds.setUser("student");
-			ds.setPassword("P@$$w0rd");
-			ds.setServerName("localhost\\sqlexpress");
-			ds.setDatabaseName("TransactionExercises");
-			
-			conn = ds.getConnection();
-			conn.setTransactionIsolation(isolationLevel);			
+		SQLServerDataSource ds = new SQLServerDataSource();
+		ds.setUser("student");
+		ds.setPassword("P@$$w0rd");
+		ds.setServerName("localhost\\sqlexpress");
+		ds.setDatabaseName("TransactionExercises");
+		return ds.getConnection();
+	}
 
-		} catch (SQLException e) {
+	public static Connection getConnection(int isolationLevel) throws SQLException {
 
-			e.printStackTrace();
-		}
-
+		Connection conn = getConnection();
+		conn.setTransactionIsolation(isolationLevel);
 		return conn;
 	}
 
