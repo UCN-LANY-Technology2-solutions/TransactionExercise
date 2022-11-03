@@ -16,10 +16,10 @@ public class DataContext {
 		// TODO: Change the values below to connect to another instance of SQL Server
 
 		SQLServerDataSource ds = new SQLServerDataSource();
-		ds.setUser("student");
+		ds.setUser("sa");
 		ds.setPassword("P@$$w0rd");
-		ds.setServerName("localhost\\sqlexpress");
-		ds.setDatabaseName("TransactionExercises");
+		ds.setServerName("192.168.253.136");
+		ds.setDatabaseName("TransactionExercise");
 		return ds.getConnection();
 	}
 
