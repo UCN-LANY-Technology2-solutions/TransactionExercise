@@ -18,7 +18,7 @@ public class DataContext {
 		SQLServerDataSource ds = new SQLServerDataSource();
 		ds.setUser("sa");
 		ds.setPassword("P@$$w0rd");
-		ds.setServerName("192.168.253.136");
+		ds.setServerName("192.168.56.101");
 		ds.setDatabaseName("TransactionExercise");
 		return ds.getConnection();
 	}
